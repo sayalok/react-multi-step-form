@@ -1,149 +1,109 @@
-import React, { Component } from "react";
-import {Form,  Button,  Card} from "react-bootstrap";
+import React, { useState } from "react";
+import { Form,  Button,  Card } from "react-bootstrap";
+
+import FormProgressBar from "../FormProgressBar/FormProgressBar";
+
 
 import FormStepOne from "../FormStepOne/FormStepOne";
 import FormStepTwo from "../FormStepTwo/FormStepTwo";
 import FormStepThree from "../FormStepThree/FormStepThree";
 
+const MainForm = props => {
 
-// import styled from "styled-components";
-import FormProgressBar from "../FormProgressBar/FormProgressBar";
 
-class MainForm extends Component {
-	constructor(props) {
-		super(props);
+	let [currentStep, setCurrentStep] = useState(1);
 
-		// Set the intiial input values
-		this.state = {
-			currentStep: 1,
-			email: "",
-			username: "",
-			password: ""
-		};
+	let [getFieldValue, setFieldValue] = useState({
+		first_name: "",
+		last_name: "",
+		email: "",
+		country: "",
+		term_check: false,
+		username: "",
+		password:"",
+		confirm_password:"",
+	});
 
-		// Bind the submission to handleChange()
-		this.handleChange = this.handleChange.bind(this);
+	const handleChange = e => {
+		let name = e.target.name;
+		let value = e.target.value;
 
-		// Bind new functions for next and previous
-		this._next = this._next.bind(this);
-		this._prev = this._prev.bind(this);
-  }
+		console.log(name)
+		console.log(value)
+	
+		if (name == "inputbrand") {
+		  props.getAllCoupon(value);
+		}
+		getFieldValue[name] = value;
+		setFieldValue(getFieldValue);
+ 	}
 
-	// Use the submitted data to set the state
-	handleChange(event) {
-		const { name, value } = event.target;
-		this.setState({
-		[name]: value
-		});
-	}
-
-	// Trigger an alert on form submission
-	handleSubmit = event => {
-		event.preventDefault();
-		const { email, username, password } = this.state;
-		alert(`Your registration detail: \n 
-		Email: ${email} \n 
-		Username: ${username} \n
-		Password: ${password}`);
+	const handleSubmitHelp = e => {
+		e.preventDefault();
+		console.log(getFieldValue)
+		if (true) {
+			console.log('askjdj')
+		} else {
+			console.log('askjdj')
+		}
 	};
 
-	// Test current step with ternary
-	// _next and _previous functions will be called on button click
-	_next() {
-		let currentStep = this.state.currentStep;
+	const previousButton = () => {	
+		return currentStep !== 1 ? <Button variant="primary" className="mr-2" onClick={() => prev()}>Previous</Button> : null;
+	}
 
-		// If the current step is 1 or 2, then add one on "next" button click
+	const nextButton = () => {
+		return currentStep < 3 ? <Button variant="primary" onClick={() => next()}>Next</Button> : null;
+	}
+
+	const submitButton = () => {
+		return currentStep > 2 ? <Button type="submit" className="ml-2">Submit</Button> : null;
+	}
+
+	const next = () =>  {
 		currentStep = currentStep >= 2 ? 3 : currentStep + 1;
-		this.setState({
-		currentStep: currentStep
-		});
+		setCurrentStep(currentStep)
 	}
-
-	_prev() {
-		let currentStep = this.state.currentStep;
-		// If the current step is 2 or 3, then subtract one on "previous" button click
+	
+	const prev = () => {
 		currentStep = currentStep <= 1 ? 1 : currentStep - 1;
-		this.setState({
-		currentStep: currentStep
-		});
+		setCurrentStep(currentStep)
 	}
 
-	// The "next" and "previous" button functions
-	get previousButton() {
-		let currentStep = this.state.currentStep;
-
-		// If the current step is not 1, then render the "previous" button
-		if (currentStep !== 1) {
-			return (
-				<Button color="secondary float-left" onClick={this._prev}>Previous</Button>
-			);
-		}
-
-		// ...else return nothing
-		return null;
-	}
-
-	get nextButton() {
-		let currentStep = this.state.currentStep;
-		// If the current step is not 3, then render the "next" button
-		if (currentStep < 3) {
-			return (
-				<Button color="primary float-right" onClick={this._next}>Next</Button>
-			);
-		}
-		// ...else render nothing
-		return null;
-	}
-
-	get submitButton() {
-		let currentStep = this.state.currentStep;
-
-		// If the current step is the last step, then render the "submit" button
-		if (currentStep > 2) {
-			return <Button color="primary float-right">Submit</Button>;
-		}
-		// ...else render nothing
-		return null;
-	}
-
-	render() {
-		return (
-			<>
-				<Form onSubmit={this.handleSubmit}>
-					<Card>
-						<Card.Header>Create an Account</Card.Header>
-						<Card.Body>
+	return (
+		<>
+			<Form onSubmit={handleSubmitHelp}>
+				<Card>
+					<Card.Header>Create an Account</Card.Header>
+					<Card.Body>
 						<Card.Title>
-							<FormProgressBar currentStep={this.state.currentStep} />
+							<FormProgressBar currentStep={currentStep} />
 						</Card.Title>
 
 						<FormStepOne
-							currentStep={this.state.currentStep}
-							handleChange={this.handleChange}
-							email={this.state.email}
+							currentStep={currentStep}
+							handleChange={(e) => handleChange(e)}
 						/>
 						<FormStepTwo
-							currentStep={this.state.currentStep}
-							handleChange={this.handleChange}
-							email={this.state.username}
+							currentStep={currentStep}
+							handleChange={(e) => handleChange(e)}
 						/>
 						<FormStepThree
-							currentStep={this.state.currentStep}
-							handleChange={this.handleChange}
-							email={this.state.password}
+							currentStep={currentStep}
+							userData={getFieldValue}
 						/>
 
-						</Card.Body>
-						<Card.Footer>
-							{this.previousButton}
-							{this.nextButton}
-							{this.submitButton}
-						</Card.Footer>
-					</Card>
-				</Form>
-			</>
-		);
-	}
+					</Card.Body>
+					<Card.Footer>
+						{previousButton()}
+						{nextButton()}
+						{submitButton()}
+					</Card.Footer>
+				</Card>
+			</Form>
+		</>
+	);
 }
 
 export default MainForm;
+
