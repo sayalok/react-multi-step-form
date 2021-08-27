@@ -14,13 +14,15 @@ const MainForm = props => {
 
 
 	let [currentStep, setCurrentStep] = useState(1);
+	const [firstBtnDisabled, setFirstBtnDisabled] = useState(true)
+	const [secondBtnDisabled, setSecondBtnDisabled] = useState(true)
 
 	let [getFieldValue, setFieldValue] = useState({
 		first_name: "",
 		last_name: "",
 		email: "",
 		country: "",
-		term_check: false,
+		term_check: "",
 		username: "",
 		password:"",
 		confirm_password:"",
@@ -29,20 +31,34 @@ const MainForm = props => {
 	const handleChange = e => {
 		let name = e.target.name;
 		let value = e.target.value;
-
-		console.log(name)
-		console.log(value)
 	
 		if (name == "inputbrand") {
 		  props.getAllCoupon(value);
 		}
 		getFieldValue[name] = value;
 		setFieldValue(getFieldValue);
+
+		if (getFieldValue.first_name !== '' && getFieldValue.last_name !== '' && getFieldValue.email !== '' && getFieldValue.country !== '' && getFieldValue.term_check !== '') {
+			setFirstBtnDisabled(false)
+		}else{
+			setFirstBtnDisabled(true)
+		}
+
+		if (getFieldValue.username !== '' && getFieldValue.password !== '' && getFieldValue.confirm_password !== '') {
+			if (getFieldValue.password === getFieldValue.confirm_password) {
+				setSecondBtnDisabled(false)
+			}else{
+				setSecondBtnDisabled(true)
+			}
+		}else{
+			setSecondBtnDisabled(true)
+		}
  	}
+
 
 	const handleSubmitHelp = e => {
 		e.preventDefault();
-		console.log(getFieldValue)
+		// console.log(getFieldValue)
 		const data = {
 			"firstName": getFieldValue.first_name,
 			"lastName": getFieldValue.last_name,
@@ -76,11 +92,15 @@ const MainForm = props => {
 	};
 
 	const previousButton = () => {	
+		// setFirstBtnDisabled(true)
+		// setSecondBtnDisabled(true)
 		return currentStep !== 1 ? <Button variant="primary" className="mr-2" onClick={() => prev()}>Previous</Button> : null;
 	}
 
 	const nextButton = () => {
-		return currentStep < 3 ? <Button variant="primary" onClick={() => next()}>Next</Button> : null;
+		let disapbleVal = firstBtnDisabled
+		if (currentStep === 2)  disapbleVal = secondBtnDisabled
+		return currentStep < 3 ? <Button variant="primary" disabled={disapbleVal} onClick={() => next()}>Next</Button> : null;
 	}
 
 	const submitButton = () => {
