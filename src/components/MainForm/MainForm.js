@@ -4,7 +4,6 @@ import { Form,  Button,  Card } from "react-bootstrap";
 import './MainForm.css';
 import FormProgressBar from "../FormProgressBar/FormProgressBar";
 
-
 import FormStepOne from "../FormStepOne/FormStepOne";
 import FormStepTwo from "../FormStepTwo/FormStepTwo";
 import FormStepThree from "../FormStepThree/FormStepThree";
@@ -58,7 +57,6 @@ const MainForm = props => {
 
 	const handleSubmitHelp = e => {
 		e.preventDefault();
-		// console.log(getFieldValue)
 		const data = {
 			"firstName": getFieldValue.first_name,
 			"lastName": getFieldValue.last_name,
@@ -92,8 +90,6 @@ const MainForm = props => {
 	};
 
 	const previousButton = () => {	
-		// setFirstBtnDisabled(true)
-		// setSecondBtnDisabled(true)
 		return currentStep !== 1 ? <Button variant="primary" className="mr-2" onClick={() => prev()}>Previous</Button> : null;
 	}
 
