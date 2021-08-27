@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Form,  Button,  Card } from "react-bootstrap";
 
+import './MainForm.css';
 import FormProgressBar from "../FormProgressBar/FormProgressBar";
 
 
 import FormStepOne from "../FormStepOne/FormStepOne";
 import FormStepTwo from "../FormStepTwo/FormStepTwo";
 import FormStepThree from "../FormStepThree/FormStepThree";
+import axios from "axios";
 
 const MainForm = props => {
 
@@ -41,11 +43,36 @@ const MainForm = props => {
 	const handleSubmitHelp = e => {
 		e.preventDefault();
 		console.log(getFieldValue)
-		if (true) {
-			console.log('askjdj')
-		} else {
-			console.log('askjdj')
+		const data = {
+			"firstName": getFieldValue.first_name,
+			"lastName": getFieldValue.last_name,
+			"email": getFieldValue.email,
+			"country": getFieldValue.country,
+			"userName": getFieldValue.username,
+			"password": getFieldValue.password,
+			"accept": getFieldValue.term_check === 'on' ? true : false
 		}
+
+		let alertDiv =  document.getElementById('alertMsg')
+
+		const headers = {}
+		axios.post('http://localhost:8081/userCreate', data, headers)
+			.then(response => {
+				if (response.status === 200) {
+					alertDiv.innerHTML = 'Success!'
+					alertDiv.classList.add("alert-success");
+					alertDiv.style.display = 'block'
+				}else{
+					alertDiv.innerHTML = 'Failed!'
+					alertDiv.classList.add("alert-danger");
+					alertDiv.style.display = 'block'
+				}
+			})
+			.catch(error => {
+				alertDiv.innerHTML = 'Failed!'
+				alertDiv.classList.add("alert-danger");
+				alertDiv.style.display = 'block'
+			})
 	};
 
 	const previousButton = () => {	
@@ -72,6 +99,7 @@ const MainForm = props => {
 
 	return (
 		<>
+			<div className="alert" id="alertMsg">Success</div>
 			<Form onSubmit={handleSubmitHelp}>
 				<Card>
 					<Card.Header>Create an Account</Card.Header>

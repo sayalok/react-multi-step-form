@@ -20,27 +20,21 @@ const FormProgressBar = props => {
       <ProgressBar percent={stepPercentage}>
         <Step>
           {({ accomplished, index }) => (
-            <div
-              className={`indexedStep ${accomplished ? "accomplished" : null}`}
-            >
+            <div className={`indexedStep ${accomplished ? "accomplished" : null}`}>
               {index + 1}
             </div>
           )}
         </Step>
         <Step>
           {({ accomplished, index }) => (
-            <div
-              className={`indexedStep ${accomplished ? "accomplished" : null}`}
-            >
+            <div className={`indexedStep ${accomplished ? "accomplished" : null}`}>
               {index + 1}
             </div>
           )}
         </Step>
         <Step>
           {({ accomplished, index }) => (
-            <div
-              className={`indexedStep ${accomplished ? "accomplished" : null}`}
-            >
+            <div className={`indexedStep ${accomplished ? "accomplished" : null}`}>
               {index + 1}
             </div>
           )}
